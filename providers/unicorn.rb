@@ -69,6 +69,8 @@ action :before_restart do
     owner new_resource.owner if new_resource.owner
     group new_resource.group if new_resource.group
 
+    env ([new_resource.environment]+new_resource.sub_resources.map{|res| res.environment}).inject({}){|acc, val| acc.merge(val)}
+
     cookbook 'application_ruby'
     options(
       :app => new_resource,
